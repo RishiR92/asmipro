@@ -468,8 +468,8 @@ export function Landing() {
   const [finalIn, setFinalIn] = useState(false);
 
   useEffect(() => {
-    const a = new IntersectionObserver(([e]) => setHeroOut(!e.isIntersecting && e.boundingClientRect.top < 0));
-    const b = new IntersectionObserver(([e]) => setFinalIn(e.isIntersecting));
+    const a = new IntersectionObserver(([e]) => e && setHeroOut(!e.isIntersecting && e.boundingClientRect.top < 0));
+    const b = new IntersectionObserver(([e]) => e && setFinalIn(e.isIntersecting));
     if (heroBtn.current) a.observe(heroBtn.current);
     if (finalRef.current) b.observe(finalRef.current);
     return () => { a.disconnect(); b.disconnect(); };

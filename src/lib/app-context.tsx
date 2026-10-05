@@ -34,7 +34,7 @@ function getSessionId() {
   return id;
 }
 
-export function getAttribution(): Record<string, string> {
+export function getAttribution(): any {
   try {
     return JSON.parse(sessionStorage.getItem("asmi_attr") || "{}");
   } catch {
@@ -67,7 +67,7 @@ export function track(name: string, meta: Record<string, unknown> = {}) {
   }
 }
 
-export function AppProvider({ children, search }: { children: ReactNode; search: Record<string, string | undefined> }) {
+export function AppProvider({ children, search }: { children: ReactNode; search: { v?: string | undefined; src?: string | undefined; lang?: string | undefined; city?: string | undefined } }) {
   const variant = resolveVariant(search.v, search.src);
   const [lang, setLangState] = useState<Lang>(search.lang === "es" ? "es" : "en");
   const [city, setCityState] = useState<CityKey | null>(search.city ? CITY_PARAM[search.city] ?? null : null);
@@ -77,7 +77,7 @@ export function AppProvider({ children, search }: { children: ReactNode; search:
     // Attribution: keep first-touch params for this session.
     const p = new URLSearchParams(window.location.search);
     if (!sessionStorage.getItem("asmi_attr")) {
-      const a: Record<string, string> = {};
+      const a: any = {};
       for (const k of ["src", "v", "city", "ref", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"]) {
         const val = p.get(k);
         if (val) a[k] = val.slice(0, 100);

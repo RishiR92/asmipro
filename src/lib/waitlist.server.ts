@@ -46,9 +46,9 @@ async function position(db: Awaited<ReturnType<typeof admin>>, row: { city: stri
   return Math.max(1, (count ?? 1) - row.referral_count * REFERRAL_BUMP);
 }
 
-async function syncSheet(stage: number, row: Record<string, any>) {
-  const url = process.env.APPS_SCRIPT_URL;
-  const secret = process.env.APPS_SCRIPT_SECRET;
+async function syncSheet(stage: number, row: any) {
+  const url = process.env['APPS_SCRIPT_URL'];
+  const secret = process.env['APPS_SCRIPT_SECRET'];
   if (!url || !secret) return;
   try {
     const r = await fetch(url, {
