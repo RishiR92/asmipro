@@ -11,6 +11,7 @@ export const CITY_SPOTS: Record<"bay_area" | "los_angeles" | "new_york", number 
 export const MIN_COUNT_TO_SHOW = 100;
 export const RECENT_MIN = 5;
 export const REFERRAL_BUMP = 0;
+export const COMMISSION_START_PERCENT = 15;
 export const NEXT_STEPS_TIMING = "";
 export const CREW_FREE = false;
 export const NO_APP_NEEDED = false;
