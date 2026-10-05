@@ -1,24 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Landing } from "@/components/asmi/landing";
+import heroBase from "@/assets/scene-hero3-base.webp.asset.json";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const OG = "https://project--18a8ffe1-7ce9-441e-8d49-a929cfa2d0f2.lovable.app/og-image.png";
+const TITLE = "Asmi for Pros: same hours, more paid jobs";
+const DESC =
+  "Paid jobs where the customer pays first, plus an AI crew that runs your office by text. For plumbers, electricians, HVAC and home service pros.";
+
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: OG },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: OG },
+    ],
+    links: [{ rel: "preload", as: "image", href: heroBase.url, fetchPriority: "high" }],
+  }),
+  component: Landing,
 });
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
