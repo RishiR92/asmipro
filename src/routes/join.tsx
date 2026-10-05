@@ -6,9 +6,9 @@ export const Route = createFileRoute("/join")({
   head: () => ({
     meta: [
       { title: "Join the Asmi for Pros waitlist" },
-      { name: "description", content: "Join the Asmi waitlist in 20 seconds. Paid jobs and an AI crew for home service pros. No card, no contract." },
+      { name: "description", content: "Join the Asmi waitlist for paid jobs with no lead fees and office help by text or voice." },
       { property: "og:title", content: "Join the Asmi for Pros waitlist" },
-      { property: "og:description", content: "Paid jobs and an AI crew for home service pros. No card, no contract." },
+      { property: "og:description", content: "Paid jobs with no lead fees and office help by text or voice for home service pros." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

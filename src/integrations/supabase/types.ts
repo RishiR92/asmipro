@@ -69,6 +69,7 @@ export type Database = {
         Row: {
           business_name: string | null
           city: string
+          confirmed_at: string | null
           consent: boolean
           consent_at: string | null
           consent_text: string | null
@@ -86,6 +87,7 @@ export type Database = {
           referral_count: number
           referred_by: string | null
           referrer: string | null
+          service_city: string | null
           src: string | null
           stage: number
           trade_other: string | null
@@ -103,6 +105,7 @@ export type Database = {
         Insert: {
           business_name?: string | null
           city: string
+          confirmed_at?: string | null
           consent?: boolean
           consent_at?: string | null
           consent_text?: string | null
@@ -120,6 +123,7 @@ export type Database = {
           referral_count?: number
           referred_by?: string | null
           referrer?: string | null
+          service_city?: string | null
           src?: string | null
           stage?: number
           trade_other?: string | null
@@ -137,6 +141,7 @@ export type Database = {
         Update: {
           business_name?: string | null
           city?: string
+          confirmed_at?: string | null
           consent?: boolean
           consent_at?: string | null
           consent_text?: string | null
@@ -154,6 +159,7 @@ export type Database = {
           referral_count?: number
           referred_by?: string | null
           referrer?: string | null
+          service_city?: string | null
           src?: string | null
           stage?: number
           trade_other?: string | null

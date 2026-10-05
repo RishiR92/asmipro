@@ -48,7 +48,7 @@ export function TopBar() {
 export function Footer() {
   const { t } = useApp();
   return (
-    <footer className="wrap" style={{ padding: "30px 20px 120px", fontSize: 15, color: "var(--muted)" }}>
+    <footer className="wrap" style={{ padding: "30px 20px 48px", fontSize: 15, color: "var(--muted)" }}>
       <img src={logo.url} alt="Asmi" width={69} height={26} style={{ height: 26, width: "auto", marginBottom: 12 }} loading="lazy" />
       <p>Humint Labs, Inc. 710 Lakeway Drive, Suite 200, Sunnyvale, CA 94085</p>
       <p className="mt-2">

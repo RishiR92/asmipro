@@ -7,11 +7,13 @@ import invLime from "@/assets/scene-invoice-lime.webp.asset.json";
 import metaLogo from "@/assets/meta-ink.svg.asset.json";
 import dmLogo from "@/assets/deepmind-ink.svg.asset.json";
 import snapLogo from "@/assets/snapchat-ink.svg.asset.json";
+import rishPhoto from "@/assets/rish-founder.jpg.asset.json";
+import satwikPhoto from "@/assets/satwik-founder.png.asset.json";
 import { track, useApp } from "@/lib/app-context";
 import { showCounts, showRecent, spotsLeft, useStats, type Stats } from "@/lib/stats";
 import { TRADE_KEYS } from "@/lib/dict";
 import {
-  CITY_SPOTS, CREW_FREE, HAS_PRO_QUOTE, NO_APP_NEEDED, PAYOUT_TIMING, PRO_QUOTE, SHOW_FOUNDER_PHOTOS,
+  CITY_SPOTS, COMMISSION_START_PERCENT, CREW_FREE, HAS_PRO_QUOTE, NO_APP_NEEDED, PAYOUT_TIMING, PRO_QUOTE, SHOW_FOUNDER_PHOTOS,
   SPANISH_CALLS, SUPPORT_EMAIL, SUPPORT_TEXT_NUMBER,
 } from "@/config";
 import { Checks, Footer, Plate, TopBar } from "./chrome";
@@ -42,7 +44,8 @@ function Hero({ stats, loading, btnRef }: { stats: Stats | undefined; loading: b
         <div>
           <p className="eyebrow">{t.hero.eyebrow}</p>
           <h1>{t.hero.h1[variant]}</h1>
-          <p className="sub">{t.hero.sub}</p>
+          <p className="sub hero-sub">{t.hero.sub}</p>
+          <p className="hero-modes">{t.hero.modes}</p>
           <div style={{ marginTop: 22 }} className="lg:max-w-[360px]">
             <button ref={btnRef} type="button" className="btn" onClick={() => openSheet("hero")}>{t.cta}</button>
             <Checks items={t.checks} />
@@ -195,6 +198,7 @@ function PaidDetail() {
     <section className="sec">
       <div className="wrap">
         <h2>{p.h2}</h2>
+        <p className="sub">{p.rate}</p>
         <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
           <div className="obj grid" style={{ gridTemplateColumns: "1fr 108px", marginTop: 20 }}>
             <div style={{ padding: 18 }}>
@@ -202,8 +206,8 @@ function PaidDetail() {
               <h3 style={{ marginTop: 4 }}>{p.job}</h3>
               <p className="small" style={{ marginBottom: 8 }}>{p.when}</p>
               <p className="row"><span>{p.r1}</span><b className="tnum">$300</b></p>
-              <p className="row"><span>{p.r2}</span><b className="tnum">$60</b></p>
-              <p className="row tot"><span>{p.tot}</span><span className="tnum">$240</span></p>
+               <p className="row"><span>{p.r2}</span><b className="tnum">${Math.round(300 * COMMISSION_START_PERCENT / 100)}</b></p>
+               <p className="row tot"><span>{p.tot}</span><span className="tnum">${300 - Math.round(300 * COMMISSION_START_PERCENT / 100)}</span></p>
             </div>
             <div className="flex flex-col justify-center gap-3" style={{ borderLeft: "2px dashed var(--ink)", padding: 10 }} aria-hidden>
               <span className="pstamp l">{p.take}</span>
@@ -251,7 +255,7 @@ function How() {
 function Founder({ src, initials, name, role, text }: { src: string; initials: string; name: string; role: string; text: string }) {
   const [failed, setFailed] = useState(!SHOW_FOUNDER_PHOTOS);
   return (
-    <div className="obj grid gap-4" style={{ gridTemplateColumns: "96px 1fr", padding: 14 }}>
+    <article className="founder-card">
       <div className={`photo ${failed ? "initials" : ""}`} aria-hidden={failed}>
         {failed ? initials : <img src={src} alt={name} width={96} height={112} loading="lazy" onError={() => setFailed(true)} />}
       </div>
@@ -260,7 +264,7 @@ function Founder({ src, initials, name, role, text }: { src: string; initials: s
         <span style={{ fontSize: 15, fontWeight: 600, color: "var(--ink)", display: "block", marginBottom: 6 }}>{role}</span>
         <p style={{ fontSize: 16, lineHeight: 1.4 }}>{text}</p>
       </div>
-    </div>
+    </article>
   );
 }
 
@@ -272,8 +276,8 @@ function Team() {
       <div className="wrap">
         <h2>{tm.h2}</h2>
         <div className="grid gap-5 lg:grid-cols-2" style={{ marginTop: 20 }}>
-          <Founder src="/team/rishi.jpg" initials="R" name="Rishi" role={tm.rishiRole} text={tm.rishi} />
-          <Founder src="/team/satwik.jpg" initials="SK" name="Satwik Kottur" role={tm.satwikRole} text={tm.satwik} />
+          <Founder src={rishPhoto.url} initials="R" name="Rish" role={tm.rishiRole} text={tm.rishi} />
+          <Founder src={satwikPhoto.url} initials="S" name="Satwik" role={tm.satwikRole} text={tm.satwik} />
         </div>
         <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
           <div className="obj letter" style={{ marginTop: 22 }}>
@@ -287,7 +291,7 @@ function Team() {
               )}
             </p>
           </div>
-          <div style={{ marginTop: 22 }}>
+          <div className="backers" style={{ marginTop: 22 }}>
             <h3 style={{ fontSize: 19 }}>{tm.backedBy}</h3>
             <ul className="grid gap-2" style={{ marginTop: 10 }}>
               {tm.backers.map(([n, d]) => (
@@ -448,32 +452,10 @@ function Final({ stats, finalRef }: { stats: Stats | undefined; finalRef: React.
   );
 }
 
-function Sticky({ show, stats }: { show: boolean; stats: Stats | undefined }) {
-  const { t, city, openSheet } = useApp();
-  const left = showCounts(stats) ? spotsLeft(stats, city) : null;
-  return (
-    <div className={`sticky ${show ? "" : "off"}`} aria-hidden={!show} inert={!show ? true : undefined}>
-      {left != null && city && <p className="text-center" style={{ fontWeight: 600, fontSize: 15, color: "var(--ink)", marginBottom: 6 }}>{t.live.stickyLeft(left, t.cities[city])}</p>}
-      <button type="button" className="btn" onClick={() => openSheet("sticky")} tabIndex={show ? 0 : -1}>{t.cta}</button>
-    </div>
-  );
-}
-
 export function Landing() {
   const { data: stats, isLoading } = useStats();
-  const { sheetOpen } = useApp();
   const heroBtn = useRef<HTMLButtonElement>(null);
   const finalRef = useRef<HTMLElement>(null);
-  const [heroOut, setHeroOut] = useState(false);
-  const [finalIn, setFinalIn] = useState(false);
-
-  useEffect(() => {
-    const a = new IntersectionObserver(([e]) => e && setHeroOut(!e.isIntersecting && e.boundingClientRect.top < 0));
-    const b = new IntersectionObserver(([e]) => e && setFinalIn(e.isIntersecting));
-    if (heroBtn.current) a.observe(heroBtn.current);
-    if (finalRef.current) b.observe(finalRef.current);
-    return () => { a.disconnect(); b.disconnect(); };
-  }, []);
 
   return (
     <>
@@ -493,7 +475,6 @@ export function Landing() {
         <Final stats={stats} finalRef={finalRef} />
       </main>
       <Footer />
-      <Sticky show={heroOut && !finalIn && !sheetOpen} stats={stats} />
       <SignupSheet />
     </>
   );

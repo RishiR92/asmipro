@@ -42,6 +42,7 @@ async function position(db: Awaited<ReturnType<typeof admin>>, row: { city: stri
     .from("waitlist_signups")
     .select("id", { count: "exact", head: true })
     .eq("city", row.city)
+    .not("confirmed_at", "is", null)
     .lte("created_at", row.created_at);
   return Math.max(1, (count ?? 1) - row.referral_count * REFERRAL_BUMP);
 }
@@ -61,6 +62,7 @@ async function syncSheet(stage: number, row: any) {
         name: row.name,
         email: row.email ?? "",
         city: row.city,
+        service_city: row.service_city ?? "",
         trade: (row.trades ?? []).join(", "),
         trade_other: row.trade_other ?? "",
         size: row.crew_size ?? "",
@@ -117,6 +119,8 @@ export async function handleSignup(request: Request) {
     const city = body.city as CityKey;
     if (!name) return json({ ok: false, error: "name" }, 400);
     if (!CITIES.includes(city)) return json({ ok: false, error: "city" }, 400);
+    const serviceCity = str(body.service_city, 100);
+    if (city === "other" && !serviceCity) return json({ ok: false, error: "service_city" }, 400);
     if (body.consent !== true) return json({ ok: false, error: "consent" }, 400);
     const ph = typeof body.phone === "string" ? parsePhoneNumberFromString(body.phone, "US") : undefined;
     if (!ph || !ph.isValid() || ph.country !== "US") return json({ ok: false, error: "phone" }, 400);
@@ -128,6 +132,7 @@ export async function handleSignup(request: Request) {
     const fields = {
       name,
       city,
+      service_city: city === "other" ? serviceCity : null,
       consent: true,
       consent_at: new Date().toISOString(),
       consent_text: str(body.consent_text, 600),
@@ -170,14 +175,9 @@ export async function handleSignup(request: Request) {
         return json({ ok: false, error: "server" }, 500);
       }
       row = data;
-      if (referred) {
-        const { data: refRow } = await db.from("waitlist_signups").select("id, referral_count").eq("ref_code", referred).maybeSingle();
-        if (refRow && refRow.id !== row.id)
-          await db.from("waitlist_signups").update({ referral_count: refRow.referral_count + 1 }).eq("id", refRow.id);
-      }
     }
     await syncSheet(1, row);
-    return json({ ok: true, token: row.edit_token, ref_code: row.ref_code, position: await position(db, row), city: row.city });
+    return json({ ok: true, token: row.edit_token, ref_code: row.ref_code, city: row.city });
   }
 
   const token = str(body.token, 40);
@@ -189,6 +189,9 @@ export async function handleSignup(request: Request) {
     if (zip && !/^\d{5}$/.test(zip)) return json({ ok: false, error: "zip" }, 400);
     const email = str(body.email, 200);
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return json({ ok: false, error: "email" }, 400);
+    const { data: current } = await db.from("waitlist_signups").select("id, confirmed_at, referred_by").eq("edit_token", token).maybeSingle();
+    if (!current) return json({ ok: false, error: "token" }, 404);
+    const confirmingNow = !current.confirmed_at;
     const { data, error } = await db
       .from("waitlist_signups")
       .update({
@@ -199,13 +202,18 @@ export async function handleSignup(request: Request) {
         business_name: str(body.business_name, 120),
         email,
         stage: 2,
+        confirmed_at: current.confirmed_at ?? new Date().toISOString(),
       })
       .eq("edit_token", token)
       .select("*")
       .maybeSingle();
     if (error || !data) return json({ ok: false, error: "token" }, 404);
+    if (confirmingNow && current.referred_by) {
+      const { data: refRow } = await db.from("waitlist_signups").select("id, referral_count").eq("ref_code", current.referred_by).not("confirmed_at", "is", null).maybeSingle();
+      if (refRow && refRow.id !== data.id) await db.from("waitlist_signups").update({ referral_count: refRow.referral_count + 1 }).eq("id", refRow.id);
+    }
     await syncSheet(2, data);
-    return json({ ok: true });
+    return json({ ok: true, position: await position(db, data) });
   }
 
   if (body.stage === 3) {
@@ -237,7 +245,7 @@ const METRO: Record<string, string> = { bay_area: "Bay Area", los_angeles: "Los 
 
 export async function handleStats() {
   const db = await admin();
-  const { data } = await db.from("waitlist_signups").select("city, created_at, trades, zip");
+  const { data } = await db.from("waitlist_signups").select("city, created_at, trades, zip").not("confirmed_at", "is", null);
   const rows = data ?? [];
   const cities = { bay_area: 0, los_angeles: 0, new_york: 0, other: 0 } as Record<string, number>;
   for (const r of rows) cities[r.city] = (cities[r.city] ?? 0) + 1;

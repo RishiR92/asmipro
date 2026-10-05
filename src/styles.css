@@ -154,6 +154,16 @@
     margin-top: 14px;
     max-width: 34ch;
   }
+  .hero-sub {
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .hero-modes {
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+  }
   .small {
     font-size: var(--fs-small);
     color: var(--muted);
@@ -726,6 +736,15 @@
     color: var(--text);
   }
 
+  .founder-card {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 16px;
+    padding: 18px;
+    background: color-mix(in oklab, var(--obj) 88%, var(--paper));
+    border: 2px solid var(--ink);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
   .photo {
     width: 96px;
     height: 112px;
@@ -761,6 +780,15 @@
   .letter {
     padding: 18px;
     background-image: repeating-linear-gradient(0deg, transparent 0 29px, var(--rule) 29px 30px);
+  }
+  .backers h3 {
+    display: inline-block;
+    padding-bottom: 4px;
+    border-bottom: 2px solid var(--ink);
+    font-family: var(--font-mono);
+    font-size: 14px !important;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
   .letter p {
     font-size: 17px;
@@ -819,26 +847,6 @@
   }
   .pm.open::after {
     display: none;
-  }
-
-  .sticky {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--paper);
-    border-top: 2px solid var(--ink);
-    padding: 10px 16px calc(14px + env(safe-area-inset-bottom));
-    z-index: 40;
-    transition: transform 200ms;
-  }
-  .sticky.off {
-    transform: translateY(110%);
-  }
-  @media (min-width: 1024px) {
-    .sticky {
-      display: none;
-    }
   }
 
   /* Signup sheet */

@@ -5,7 +5,7 @@ import heroBase from "@/assets/scene-hero3-base.webp.asset.json";
 const OG = "https://project--18a8ffe1-7ce9-441e-8d49-a929cfa2d0f2.lovable.app/og-image.png";
 const TITLE = "Asmi for Pros: same hours, more paid jobs";
 const DESC =
-  "Paid jobs where the customer pays first, plus an AI crew that runs your office by text. For plumbers, electricians, HVAC and home service pros.";
+  "Paid jobs with no lead fees, plus help with office work by text or voice in 30+ languages for home service pros.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
