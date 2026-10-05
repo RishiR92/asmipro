@@ -69,7 +69,7 @@ export function DayThread() {
     setShown(0);
     const io = new IntersectionObserver(
       (es) => {
-        if (es[0].isIntersecting) {
+        if (es[0]?.isIntersecting) {
           io.disconnect();
           play();
         }

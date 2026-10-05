@@ -18,7 +18,7 @@ import { Checks, Footer, Plate, TopBar } from "./chrome";
 import { DayThread } from "./day-thread";
 import { SignupSheet } from "./signup";
 
-function LiveLine({ stats, loading }: { stats?: Stats; loading: boolean }) {
+function LiveLine({ stats, loading }: { stats: Stats | undefined; loading: boolean }) {
   const { t, city } = useApp();
   if (loading) return <p className="live" aria-hidden><span className="skel" /></p>;
   if (!showCounts(stats)) return null;
@@ -34,7 +34,7 @@ function LiveLine({ stats, loading }: { stats?: Stats; loading: boolean }) {
   );
 }
 
-function Hero({ stats, loading, btnRef }: { stats?: Stats; loading: boolean; btnRef: React.RefObject<HTMLButtonElement | null> }) {
+function Hero({ stats, loading, btnRef }: { stats: Stats | undefined; loading: boolean; btnRef: React.RefObject<HTMLButtonElement | null> }) {
   const { t, variant, openSheet } = useApp();
   return (
     <section style={{ paddingTop: 4, paddingBottom: 36 }}>
@@ -312,7 +312,7 @@ function SpotBar({ taken, cap }: { taken: number; cap: number }) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !ref.current) return;
     setN(0);
     const io = new IntersectionObserver((es) => {
-      if (es[0].isIntersecting) {
+      if (es[0]?.isIntersecting) {
         io.disconnect();
         for (let i = 1; i <= filled; i++) setTimeout(() => setN(i), (500 / Math.max(1, filled)) * i);
       }
@@ -327,7 +327,7 @@ function SpotBar({ taken, cap }: { taken: number; cap: number }) {
   );
 }
 
-function Spots({ stats }: { stats?: Stats }) {
+function Spots({ stats }: { stats: Stats | undefined }) {
   const { t } = useApp();
   if (!showCounts(stats)) return null;
   const s = stats!;
@@ -431,7 +431,7 @@ function Faq() {
   );
 }
 
-function Final({ stats, finalRef }: { stats?: Stats; finalRef: React.RefObject<HTMLElement | null> }) {
+function Final({ stats, finalRef }: { stats: Stats | undefined; finalRef: React.RefObject<HTMLElement | null> }) {
   const { t, city, openSheet } = useApp();
   const left = showCounts(stats) ? spotsLeft(stats, city) : null;
   return (
@@ -448,7 +448,7 @@ function Final({ stats, finalRef }: { stats?: Stats; finalRef: React.RefObject<H
   );
 }
 
-function Sticky({ show, stats }: { show: boolean; stats?: Stats }) {
+function Sticky({ show, stats }: { show: boolean; stats: Stats | undefined }) {
   const { t, city, openSheet } = useApp();
   const left = showCounts(stats) ? spotsLeft(stats, city) : null;
   return (

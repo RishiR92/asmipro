@@ -130,7 +130,7 @@ const en = {
     full: "WAITLIST ONLY",
     next: "Join for the next group.",
     recent: "Recent joins",
-    when: { today: "today", yesterday: "yesterday", "this week": "this week" } as Record<string, string>,
+    when: { today: "today", yesterday: "yesterday", "this week": "this week" },
     defaultTrade: "Home service pro",
   },
   cities: {
@@ -157,7 +157,7 @@ const en = {
       start: ["Where are you starting?", "The Bay Area, Los Angeles and New York."],
       spanish: ["Does Asmi speak Spanish?", "Yes. Asmi talks to your customers in Spanish and 30+ other languages."],
       payout: ["How fast do I get paid out?", ""],
-    } as Record<string, [string, string]>,
+    } satisfies Record<string, [string, string]>,
   },
   final: { h2: "Paid jobs and an AI crew. Free to join." },
   footer: { questions: "Questions?", text: "Text", privacy: "Privacy", terms: "Terms" },
