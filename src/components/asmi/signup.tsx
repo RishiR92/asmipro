@@ -11,7 +11,7 @@ import { Plate } from "./chrome";
 
 const CITY_KEYS: CityKey[] = ["bay_area", "los_angeles", "new_york", "other"];
 
-type Errs = Partial<Record<"city" | "name" | "phone" | "consent" | "net" | "zip" | "email", string>>;
+type Errs = Partial<Record<"city" | "serviceCity" | "name" | "phone" | "consent" | "net" | "zip" | "email", string>>;
 type Saved = { token: string | null; ref_code: string | null; position: number | null; city: CityKey };
 
 async function post(body: unknown) {
@@ -29,6 +29,7 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
   const s = t.sheet;
   const [step, setStep] = useState(1);
   const [city, setCityLocal] = useState<CityKey | null>(ctxCity);
+  const [serviceCity, setServiceCity] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [consent, setConsent] = useState(false);
@@ -51,6 +52,7 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
     e.preventDefault();
     const er: Errs = {};
     if (!city) er.city = s.errCity;
+    if (city === "other" && !serviceCity.trim()) er.serviceCity = s.errOtherCity;
     if (!name.trim()) er.name = s.errName;
     if (!isValidPhoneNumber(phone, "US")) er.phone = s.errPhone;
     if (!consent) er.consent = s.errConsent;
@@ -64,7 +66,7 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
     setBusy(true);
     try {
       const { ok, data } = await post({
-        stage: 1, city, name, phone, consent, lang, variant, hp,
+        stage: 1, city, service_city: serviceCity, name, phone, consent, lang, variant, hp,
         consent_text: t.consentText, attribution: getAttribution(),
       });
       if (!ok) {
@@ -74,7 +76,7 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
         return;
       }
       setCity(city!);
-      setSaved({ token: data.token, ref_code: data.ref_code, position: data.position, city: city! });
+      setSaved({ token: data.token, ref_code: data.ref_code, position: null, city: city! });
       track("step1_success", { city });
       setStep(2);
     } catch {
@@ -96,8 +98,9 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
     track("step2_submit", { trades: trades.length, crew });
     try {
       if (saved?.token) {
-        const { ok } = await post({ stage: 2, token: saved.token, trades, trade_other: tradeOther, crew_size: crew, zip, business_name: biz, email });
+        const { ok, data } = await post({ stage: 2, token: saved.token, trades, trade_other: tradeOther, crew_size: crew, zip, business_name: biz, email });
         if (!ok) { setErrs({ net: s.errNet }); return; }
+        setSaved((current) => current ? { ...current, position: data.position ?? null } : current);
       }
       setStep(3);
     } catch {
@@ -160,6 +163,16 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
             <p className="err" aria-live="polite">{errs.city}</p>
           </fieldset>
 
+          {city === "other" && (
+            <>
+              <label className="flabel" htmlFor="f-service-city">{s.otherCity}</label>
+              <input id="f-service-city" className="field" autoComplete="address-level2" placeholder={s.otherCityPh} value={serviceCity} maxLength={100}
+                onChange={(e) => { setServiceCity(e.target.value); setErrs((current) => ({ ...current, serviceCity: "" })); }}
+                aria-invalid={!!errs.serviceCity} aria-describedby="e-service-city" />
+              <p className="err" id="e-service-city" aria-live="polite">{errs.serviceCity}</p>
+            </>
+          )}
+
           <label className="flabel" htmlFor="f-name">{s.name}</label>
           <input id="f-name" className="field" autoComplete="name" placeholder={s.namePh} value={name} maxLength={80}
             onChange={(e) => setName(e.target.value)} aria-invalid={!!errs.name} aria-describedby="e-name" />
@@ -182,7 +195,7 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
           <label className="consent" htmlFor="f-consent">
             <input id="f-consent" type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} aria-describedby="e-consent" />
             <span>
-              <b>{s.consentBold}</b>
+              <b>{s.consentBold}</b>{" "}
               {s.consentPre}
               <Link to="/terms" target="_blank" rel="noopener">{s.terms}</Link>
               {s.and}
@@ -193,7 +206,7 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
 
           <button type="submit" className="btn mt-4" disabled={busy}>{busy ? s.saving : s.h}</button>
           <p className="err text-center" aria-live="polite">{errs.net}</p>
-          <p className="text-center" style={{ fontSize: 15, color: "var(--muted)", marginTop: 10 }}>{s.under}</p>
+          {s.under && <p className="text-center" style={{ fontSize: 15, color: "var(--muted)", marginTop: 10 }}>{s.under}</p>}
         </form>
       )}
 
@@ -243,9 +256,6 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
 
           <button type="submit" className="btn mt-4" disabled={busy}>{busy ? s.saving : s.save}</button>
           <p className="err text-center" aria-live="polite">{errs.net}</p>
-          <div className="text-center">
-            <button type="button" className="linkbtn" onClick={() => { track("step2_skip"); setStep(3); }}>{s.skip}</button>
-          </div>
         </form>
       )}
 
@@ -270,9 +280,8 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
           <div className="card2">
             <p style={{ fontWeight: 700, color: "var(--ink)", fontSize: 17 }}>{s.knowPro}</p>
             {REFERRAL_BUMP > 0 && <p style={{ fontSize: 15, marginTop: 4 }}>{s.bump(REFERRAL_BUMP)}</p>}
-            <div className="grid grid-cols-3 gap-2 mt-3">
+            <div className="grid grid-cols-2 gap-3 mt-3">
               <button type="button" className="btn-2 lime" onClick={share}>{s.share}</button>
-              <a className="btn-2 text-center" style={{ textDecoration: "none" }} href={`sms:?&body=${encodeURIComponent(shareMsg)}`} onClick={() => track("share_click", { method: "sms" })}>{s.textIt}</a>
               <button type="button" className="btn-2" onClick={copy} aria-live="polite">{copied ? s.copied : s.copy}</button>
             </div>
           </div>
