@@ -35,7 +35,7 @@ Evidence reviewed includes Google Local Services pricing/conversion analysis, An
    - Use “Rish” and “Satwik” everywhere.
    - Replace the founder note with a sharper version centered on 5,000 completed home-service tasks, missed work, failed leads, and Asmi fixing both.
    - Change “Is Asmi a real company?” to “How can I trust Asmi?” and answer with specific company, team, and backer facts.
-   - Founder photo files are not currently present, so retain the polished initials fallback unless photos are supplied.
+   - Use the supplied Rish and Satwik portraits, cropped consistently and treated in the restrained print style selected for this section.
 
 5. **Remove the obstructive repeat CTA**
    - Remove the persistent bottom waitlist bar.
@@ -72,4 +72,4 @@ Evidence reviewed includes Google Local Services pricing/conversion analysis, An
 ## Validation and launch notes
 - The 30+ language and voice claims will be presented as current capabilities, based on the user’s confirmation.
 - The exact legal wording in Privacy and Terms remains a separate launch dependency because the old repository text was not provided.
-- Real founding-spot caps, a support text number, and founder photos remain hidden/fallback until supplied.
+- Real founding-spot caps and a support text number remain hidden until supplied.
