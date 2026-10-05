@@ -60,7 +60,8 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
     track("step1_submit");
     if (Object.keys(er).length) {
       Object.keys(er).forEach((f) => track("step1_error", { field: f }));
-      document.getElementById(`f-${Object.keys(er)[0]}`)?.focus();
+      const first = Object.keys(er)[0];
+      document.getElementById(first === "serviceCity" ? "f-service-city" : `f-${first}`)?.focus();
       return;
     }
     setBusy(true);
