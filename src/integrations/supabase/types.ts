@@ -14,7 +14,162 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      events: {
+        Row: {
+          created_at: string
+          id: string
+          lang: string | null
+          meta: Json | null
+          name: string
+          session_id: string | null
+          src: string | null
+          variant: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lang?: string | null
+          meta?: Json | null
+          name: string
+          session_id?: string | null
+          src?: string | null
+          variant?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lang?: string | null
+          meta?: Json | null
+          name?: string
+          session_id?: string | null
+          src?: string | null
+          variant?: string | null
+        }
+        Relationships: []
+      }
+      rate_limits: {
+        Row: {
+          created_at: string
+          id: number
+          key: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          key: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          key?: string
+        }
+        Relationships: []
+      }
+      waitlist_signups: {
+        Row: {
+          business_name: string | null
+          city: string
+          consent: boolean
+          consent_at: string | null
+          consent_text: string | null
+          consent_version: string
+          created_at: string
+          crew_size: string | null
+          demo_call_requested: boolean
+          edit_token: string | null
+          email: string | null
+          id: string
+          lang: string | null
+          name: string
+          phone_e164: string
+          ref_code: string | null
+          referral_count: number
+          referred_by: string | null
+          referrer: string | null
+          src: string | null
+          stage: number
+          trade_other: string | null
+          trades: string[] | null
+          updated_at: string
+          user_agent: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+          variant: string | null
+          zip: string | null
+        }
+        Insert: {
+          business_name?: string | null
+          city: string
+          consent?: boolean
+          consent_at?: string | null
+          consent_text?: string | null
+          consent_version?: string
+          created_at?: string
+          crew_size?: string | null
+          demo_call_requested?: boolean
+          edit_token?: string | null
+          email?: string | null
+          id?: string
+          lang?: string | null
+          name: string
+          phone_e164: string
+          ref_code?: string | null
+          referral_count?: number
+          referred_by?: string | null
+          referrer?: string | null
+          src?: string | null
+          stage?: number
+          trade_other?: string | null
+          trades?: string[] | null
+          updated_at?: string
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          variant?: string | null
+          zip?: string | null
+        }
+        Update: {
+          business_name?: string | null
+          city?: string
+          consent?: boolean
+          consent_at?: string | null
+          consent_text?: string | null
+          consent_version?: string
+          created_at?: string
+          crew_size?: string | null
+          demo_call_requested?: boolean
+          edit_token?: string | null
+          email?: string | null
+          id?: string
+          lang?: string | null
+          name?: string
+          phone_e164?: string
+          ref_code?: string | null
+          referral_count?: number
+          referred_by?: string | null
+          referrer?: string | null
+          src?: string | null
+          stage?: number
+          trade_other?: string | null
+          trades?: string[] | null
+          updated_at?: string
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          variant?: string | null
+          zip?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
