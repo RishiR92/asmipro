@@ -27,3 +27,9 @@ npm run dev
 - TypeScript
 - React
 - Tailwind CSS
+
+## Asmi for Pros notes
+- Spanish copy needs native speaker review before launch.
+- Launch switches live in src/config.ts.
+- Privacy and Terms are drafts until the old repo text is pasted in.
+- Founder photos go in public/team/rishi.jpg and public/team/satwik.jpg.
