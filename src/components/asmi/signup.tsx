@@ -11,6 +11,7 @@ import { Plate } from "./chrome";
 
 const CITY_KEYS: CityKey[] = ["bay_area", "los_angeles", "new_york", "other"];
 
+type Errs = Partial<Record<"city" | "name" | "phone" | "consent" | "net" | "zip" | "email", string>>;
 type Saved = { token: string | null; ref_code: string | null; position: number | null; city: CityKey };
 
 async function post(body: unknown) {
@@ -32,7 +33,7 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
   const [phone, setPhone] = useState("");
   const [consent, setConsent] = useState(false);
   const [hp, setHp] = useState("");
-  const [errs, setErrs] = useState<Record<string, string>>({});
+  const [errs, setErrs] = useState<Errs>({});
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState<Saved | null>(null);
   // step 2
@@ -48,7 +49,7 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
 
   async function submit1(e: React.FormEvent) {
     e.preventDefault();
-    const er: Record<string, string> = {};
+    const er: Errs = {};
     if (!city) er.city = s.errCity;
     if (!name.trim()) er.name = s.errName;
     if (!isValidPhoneNumber(phone, "US")) er.phone = s.errPhone;
@@ -86,7 +87,7 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
 
   async function submit2(e: React.FormEvent) {
     e.preventDefault();
-    const er: Record<string, string> = {};
+    const er: Errs = {};
     if (zip && !/^\d{5}$/.test(zip)) er.zip = s.errZip;
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) er.email = s.errEmail;
     setErrs(er);
