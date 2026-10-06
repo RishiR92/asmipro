@@ -488,6 +488,13 @@
   .pains {
     padding: 6px 18px;
   }
+  .pain-fix {
+    margin-top: 16px;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .desktop-pain-fix { display: none; }
   .pain {
     padding: 13px 0 13px 36px;
     position: relative;
@@ -916,7 +923,8 @@
     }
     .desktop-story-heading h2 { max-width: 9ch; }
     .pain-section .pains { margin-top: 0 !important; }
-    .pain-fix { margin-top: 22px; max-width: 18ch; font-size: 24px; font-weight: 700; color: var(--ink); }
+    .desktop-pain-fix { display: block; margin-top: 22px; max-width: 18ch; font-size: 24px; }
+    .mobile-pain-fix { display: none; }
     .two-section > .wrap > h2,
     .paid-section > .wrap > h2,
     .how-section > .wrap > h2,

@@ -80,13 +80,14 @@ function Pain() {
       <div className="wrap desktop-story-grid">
         <div className="desktop-story-heading">
           <h2>{t.pain.h2}</h2>
-          <p className="pain-fix">{t.pain.fix}</p>
+          <p className="pain-fix desktop-pain-fix">{t.pain.fix}</p>
         </div>
         <div className="obj pains" style={{ marginTop: 18 }}>
           {t.pain.items.map((p) => (
             <p key={p} className="pain"><span className="xmark" aria-hidden />{p}</p>
           ))}
         </div>
+        <p className="pain-fix mobile-pain-fix">{t.pain.fix}</p>
       </div>
     </section>
   );
