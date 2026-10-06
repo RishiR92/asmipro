@@ -8,13 +8,10 @@ import metaLogo from "@/assets/meta-ink.svg.asset.json";
 import dmLogo from "@/assets/deepmind-ink.svg.asset.json";
 import rishPhoto from "@/assets/rish-founder.jpg.asset.json";
 import satwikPhoto from "@/assets/satwik-founder.png.asset.json";
-import { track, useApp } from "@/lib/app-context";
+import { useApp } from "@/lib/app-context";
 import { showCounts, showRecent, spotsLeft, useStats, type Stats } from "@/lib/stats";
 import { TRADE_KEYS } from "@/lib/dict";
-import {
-  CITY_SPOTS, COMMISSION_START_PERCENT, CREW_FREE, HAS_PRO_QUOTE, NO_APP_NEEDED, PAYOUT_TIMING, PRO_QUOTE, SHOW_FOUNDER_PHOTOS,
-  SPANISH_CALLS, SUPPORT_EMAIL, SUPPORT_TEXT_NUMBER,
-} from "@/config";
+import { CITY_SPOTS, COMMISSION_START_PERCENT, CREW_FREE, HAS_PRO_QUOTE, PRO_QUOTE, SHOW_FOUNDER_PHOTOS } from "@/config";
 import { Checks, Footer, Plate, TopBar } from "./chrome";
 import { DayThread } from "./day-thread";
 import { SignupSheet } from "./signup";
@@ -38,20 +35,20 @@ function LiveLine({ stats, loading }: { stats: Stats | undefined; loading: boole
 function Hero({ stats, loading, btnRef }: { stats: Stats | undefined; loading: boolean; btnRef: React.RefObject<HTMLButtonElement | null> }) {
   const { t, variant, openSheet } = useApp();
   return (
-    <section style={{ paddingTop: 4, paddingBottom: 36 }}>
-      <div className="wrap lg:grid lg:grid-cols-2 lg:items-center lg:gap-12">
-        <div>
+    <section className="hero-section">
+      <div className="wrap hero-layout">
+        <div className="hero-copy">
            {t.hero.eyebrow && <p className="eyebrow">{t.hero.eyebrow}</p>}
           <h1>{t.hero.h1[variant]}</h1>
           <p className="sub hero-sub">{t.hero.sub}</p>
            {t.hero.modes && <p className="hero-modes">{t.hero.modes}</p>}
-          <div style={{ marginTop: 22 }} className="lg:max-w-[360px]">
+          <div className="hero-action">
             <button ref={btnRef} type="button" className="btn" onClick={() => openSheet("hero")}>{t.cta}</button>
             <Checks items={t.checks} />
             <LiveLine stats={stats} loading={loading} />
           </div>
         </div>
-        <div className="relative" style={{ marginTop: 22, marginBottom: 14 }}>
+        <div className="hero-visual">
           <Plate base={heroBase.url} lime={heroLime.url} alt={t.hero.artAlt} w={1000} h={747} eager settle />
           <div className="chip">
             <span className="tag">{t.example}</span>
@@ -84,10 +81,6 @@ function Trust() {
         <span className="trust-item">
           <span className="trust-mark" aria-hidden>S</span>
           <span>{tr.backed[0]}<b>{tr.backed[1]}</b></span>
-        </span>
-        <span className="trust-item">
-          <b className="tnum" style={{ fontSize: 16 }}>2,500+</b>
-          <span>{tr.biz}</span>
         </span>
       </div>
     </button>
@@ -278,19 +271,8 @@ function Team() {
           <Founder src={rishPhoto.url} initials="R" name="Rish" role={tm.rishiRole} text={tm.rishi} />
           <Founder src={satwikPhoto.url} initials="S" name="Satwik" role={tm.satwikRole} text={tm.satwik} />
         </div>
-         <div className="team-proof">
-          <div className="obj letter" style={{ marginTop: 22 }}>
-            <p>{tm.letter}</p>
-            <p style={{ marginTop: 8, fontWeight: 700, color: "var(--ink)" }}>{tm.sig}</p>
-            <p>
-              {SUPPORT_TEXT_NUMBER ? (
-                <>{tm.qText(SUPPORT_TEXT_NUMBER).replace(/\.$/, "")}.</>
-              ) : (
-                <a href={`mailto:${SUPPORT_EMAIL}`} style={{ color: "var(--ink)" }}>{tm.qEmail(SUPPORT_EMAIL)}</a>
-              )}
-            </p>
-          </div>
-          <div className="backers" style={{ marginTop: 22 }}>
+        <div className="team-proof">
+          <div className="backers">
             <h3 style={{ fontSize: 19 }}>{tm.backedBy}</h3>
              <ul className="backer-brands" style={{ marginTop: 10 }}>
               {tm.backers.map(([n, d]) => (
@@ -299,7 +281,7 @@ function Team() {
                 </li>
               ))}
             </ul>
-             {tm.company && <p className="small" style={{ marginTop: 14 }}>{tm.company}</p>}
+            {tm.company && <p className="small" style={{ marginTop: 14 }}>{tm.company}</p>}
           </div>
         </div>
       </div>

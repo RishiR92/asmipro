@@ -215,7 +215,7 @@ const en = {
   },
   // Exact consent text stored with each signup, in the language shown.
   consentText:
-    "Asmi can text or call me about the waitlist. Asmi is an AI assistant. Msg and data rates may apply. Reply STOP to opt out. I agree to the Terms and Privacy Policy.",
+    "Asmi can text or call me about the waitlist.",
 };
 
 export type Dict = typeof en;
@@ -432,7 +432,7 @@ const es: Dict = {
     callDone: "Listo. Alguien de Asmi te va a llamar.",
   },
   consentText:
-    "Asmi me puede mandar textos o llamar sobre la lista de espera. Asmi es un asistente de IA. Pueden aplicar cargos por mensajes y datos. Responde STOP para cancelar. Acepto los Términos y la Política de privacidad.",
+    "Asmi me puede mandar textos o llamar sobre la lista de espera.",
 };
 
 // Trade keys stored in the database (language independent).

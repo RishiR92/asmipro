@@ -156,7 +156,8 @@
   }
   .hero-sub {
     font-weight: 500;
-    line-height: 1.4;
+    line-height: 1.35;
+    max-width: 31ch;
   }
   .hero-modes {
     margin-top: 10px;
@@ -380,6 +381,46 @@
   }
   .trust-item b {
     color: var(--ink);
+  }
+  .hero-section {
+    padding: 12px 0 34px;
+  }
+  .hero-layout {
+    display: grid;
+    gap: 24px;
+  }
+  .hero-copy h1 {
+    max-width: 10ch;
+  }
+  .hero-action {
+    margin-top: 22px;
+  }
+  .hero-visual {
+    position: relative;
+    width: min(100%, 330px);
+    margin: 2px auto 14px;
+  }
+  .hero-visual .chip {
+    left: 4px;
+    bottom: -10px;
+  }
+  .trust-grid {
+    display: grid;
+    gap: 10px;
+  }
+  .trust-item {
+    min-width: 0;
+  }
+  .trust-mark {
+    width: 26px;
+    height: 26px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    font: 700 13px var(--font-display);
   }
 
   /* Print objects */
@@ -745,6 +786,26 @@
     border: 2px solid var(--ink);
     box-shadow: 5px 5px 0 var(--ink);
   }
+  .team-proof {
+    margin-top: 28px;
+  }
+  .backers {
+    max-width: 720px;
+  }
+  .backer-brands {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .backer-brands li {
+    min-width: 0;
+    padding: 14px 8px;
+    border: 2px solid var(--ink);
+    background: var(--obj);
+    color: var(--ink);
+    text-align: center;
+    font-size: 16px;
+  }
   .photo {
     width: 96px;
     height: 112px;
@@ -793,6 +854,39 @@
   .letter p {
     font-size: 17px;
     line-height: 30px;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-section {
+      padding: 34px 0 52px;
+    }
+    .hero-layout {
+      grid-template-columns: minmax(0, 1fr) minmax(420px, 0.9fr);
+      align-items: center;
+      gap: 64px;
+    }
+    .hero-action {
+      max-width: 380px;
+    }
+    .hero-visual {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto 14px;
+    }
+    .trust-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: center;
+    }
+    .trust-item:last-child {
+      justify-self: end;
+    }
+    .team-proof {
+      display: flex;
+      justify-content: center;
+    }
+    .backers {
+      width: min(100%, 720px);
+    }
   }
 
   .bar {
