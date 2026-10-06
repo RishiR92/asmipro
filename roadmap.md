@@ -21,3 +21,5 @@
 - [x] Verify both languages, reduced motion, mobile, and desktop
 - [x] Give the conversation a realistic fixed phone size with automatic message scrolling
 - [x] Speed up the coordinated team/backer ticker and verify both languages
+- [x] Remove launch-city wording from the form in both languages
+- [x] Start the phone demo only after scrolling it into view and verify playback

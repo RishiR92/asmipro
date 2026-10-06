@@ -34,7 +34,7 @@ export function DayThread() {
   const m = t.day.msgs as Record<string, string>;
   const ref = useRef<HTMLDivElement>(null);
   const threadRef = useRef<HTMLOListElement>(null);
-  const [shown, setShown] = useState(SCRIPT.length); // SSR and reduced motion: final state
+  const [shown, setShown] = useState(0);
   const [typing, setTyping] = useState(-1);
   const [role, setRole] = useState<number | null>(null);
   const [runId, setRunId] = useState(0);
@@ -67,22 +67,39 @@ export function DayThread() {
   };
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShown(SCRIPT.length);
+      return;
+    }
     const el = ref.current;
     if (!el) return;
-    setShown(0);
+    let started = false;
+    let hasScrolled = window.scrollY > 0;
+    const startWhenVisible = () => {
+      if (started || !hasScrolled) return;
+      const bounds = el.getBoundingClientRect();
+      const visibleHeight = Math.max(0, Math.min(bounds.bottom, window.innerHeight) - Math.max(bounds.top, 0));
+      if (visibleHeight < Math.min(bounds.height * 0.4, window.innerHeight * 0.5)) return;
+      started = true;
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      play();
+    };
+    const onScroll = () => {
+      hasScrolled = true;
+      startWhenVisible();
+    };
     const io = new IntersectionObserver(
       (es) => {
-        if (es[0]?.isIntersecting) {
-          io.disconnect();
-          play();
-        }
+        if (es[0]?.isIntersecting) startWhenVisible();
       },
       { threshold: 0.4 },
     );
+    window.addEventListener("scroll", onScroll, { passive: true });
     io.observe(el);
     return () => {
       io.disconnect();
+      window.removeEventListener("scroll", onScroll);
       timers.current.forEach(clearTimeout);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,9 +107,9 @@ export function DayThread() {
 
   useEffect(() => {
     const thread = threadRef.current;
-    if (!thread || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!thread || runId === 0 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     thread.scrollTo({ top: thread.scrollHeight, behavior: shown === 0 ? "instant" : "smooth" });
-  }, [shown, typing]);
+  }, [shown, typing, runId]);
 
   const done = shown >= SCRIPT.length;
 
