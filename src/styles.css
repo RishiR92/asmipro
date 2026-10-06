@@ -409,46 +409,59 @@
     gap: 10px;
   }
   .company-proof {
-    display: grid;
-    gap: 10px;
+    display: block;
     width: 100%;
+    overflow: hidden;
+  }
+  .company-proof-sequence {
+    height: 40px;
+    overflow: hidden;
+  }
+  .company-proof-sequence-track {
+    animation: proof-sequence 18s ease-in-out infinite;
   }
   .company-proof-row {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 4px 8px;
-    font-size: 16px;
-    line-height: 26px;
+    justify-content: center;
+    gap: 8px;
+    height: 40px;
+    font-size: 18px;
+    line-height: 32px;
+    white-space: nowrap;
   }
   .company-ticker {
+    --ticker-step: 32px;
     display: inline-block;
-    height: 26px;
-    width: 82px;
+    height: 32px;
+    width: 104px;
     overflow: hidden;
     color: var(--ink);
   }
   .company-ticker-track {
     display: block;
-    animation: company-roll 9s ease-in-out infinite;
+    animation: company-roll 9s steps(1, end) infinite;
   }
   .company-ticker-track b {
     display: block;
-    height: 26px;
-    line-height: 26px;
+    height: 32px;
+    line-height: 32px;
   }
   .company-proof-row:nth-child(2) .company-ticker-track {
     animation-delay: -1.5s;
   }
-  .company-static { display: none; color: var(--ink); }
+  .company-static,
+  .company-proof-static { display: none; color: var(--ink); }
   .company-proof:hover .company-ticker-track { animation-play-state: paused; }
   @media (min-width: 1024px) {
-    .company-proof { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .company-proof-row { justify-content: center; font-size: 18px; }
+    .company-proof-sequence { height: 64px; }
+    .company-proof-row { height: 64px; font-size: 30px; line-height: 44px; gap: 14px; }
+    .company-ticker { --ticker-step: 44px; height: 44px; width: 170px; }
+    .company-ticker-track b { height: 44px; line-height: 44px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .company-ticker { display: none; }
-    .company-static { display: inline; }
+    .company-proof-sequence { display: none; }
+    .company-proof-static { display: block; text-align: center; }
   }
   .trust-item {
     min-width: 0;
@@ -475,6 +488,13 @@
   .pains {
     padding: 6px 18px;
   }
+  .pain-fix {
+    margin-top: 16px;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .desktop-pain-fix { display: none; }
   .pain {
     padding: 13px 0 13px 36px;
     position: relative;
@@ -891,6 +911,31 @@
   }
 
   @media (min-width: 1024px) {
+    .wrap { max-width: 1240px; padding-inline: 48px; }
+    .sec { padding-block: 76px; }
+    .story-section { border-top: 1.5px solid var(--line); }
+    .story-section > .wrap { max-width: 1160px; }
+    .desktop-story-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1.28fr);
+      gap: 80px;
+      align-items: center;
+    }
+    .desktop-story-heading h2 { max-width: 9ch; }
+    .pain-section .pains { margin-top: 0 !important; }
+    .desktop-pain-fix { display: block; margin-top: 22px; max-width: 18ch; font-size: 24px; }
+    .mobile-pain-fix { display: none; }
+    .two-section > .wrap > h2,
+    .paid-section > .wrap > h2,
+    .how-section > .wrap > h2,
+    .team-section > .wrap > h2,
+    .spots-section > .wrap > h2 { max-width: 18ch; }
+    .two-section > .wrap > .grid,
+    .paid-section > .wrap > .grid { margin-top: 34px !important; gap: 42px; }
+    .day-section { background: var(--obj); }
+    .how-section .route { max-width: 760px; margin-inline: auto; }
+    .team-section > .wrap > .grid { gap: 34px; margin-top: 34px !important; }
+    .spots-section > .wrap > .grid { gap: 22px; margin-top: 30px !important; }
     .hero-section {
       padding: 34px 0 52px;
     }
@@ -1203,10 +1248,15 @@
   }
 }
 @keyframes company-roll {
-  0%, 25% { transform: translateY(0); }
-  33.333%, 58% { transform: translateY(-26px); }
-  66.666%, 91% { transform: translateY(-52px); }
-  100% { transform: translateY(-78px); }
+  0%, 32% { transform: translateY(0); }
+  33%, 65% { transform: translateY(calc(-1 * var(--ticker-step))); }
+  66%, 99% { transform: translateY(calc(-2 * var(--ticker-step))); }
+  100% { transform: translateY(calc(-3 * var(--ticker-step))); }
+}
+@keyframes proof-sequence {
+  0%, 44% { transform: translateY(0); }
+  50%, 94% { transform: translateY(-33.333%); }
+  100% { transform: translateY(-66.666%); }
 }
 @keyframes land {
   from {
