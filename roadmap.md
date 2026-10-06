@@ -10,3 +10,8 @@
 - [x] Refine founder and backer presentation
 - [x] Remove FAQ and draft legal pages
 - [x] Verify mobile, desktop, bilingual copy, and waitlist flow
+- [x] Remove duplicate CTA tags and end-of-day receipt
+- [x] Add logo-free rotating company proof in both locations
+- [x] Rewrite phone examples in natural pro language in both languages
+- [x] Track 200 remaining spots and continue confirmed queue numbers from 305
+- [x] Verify updated page and counting behavior

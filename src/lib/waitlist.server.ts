@@ -1,5 +1,6 @@
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { REFERRAL_BUMP, type CityKey } from "@/config";
+import { queuePosition, waitlistTotals } from "./waitlist-counts";
 
 const CITIES: CityKey[] = ["bay_area", "los_angeles", "new_york", "other"];
 const TRADES = ["plumbing", "electrical", "hvac", "handyman", "roofing", "general_contractor", "cleaning", "other"];
@@ -37,14 +38,15 @@ async function limited(db: Awaited<ReturnType<typeof admin>>, ip: string, bucket
   return false;
 }
 
-async function position(db: Awaited<ReturnType<typeof admin>>, row: { city: string; created_at: string; referral_count: number }) {
-  const { count } = await db
+async function position(db: Awaited<ReturnType<typeof admin>>, row: { confirmed_at: string | null; referral_count: number }) {
+  if (!row.confirmed_at) throw new Error("Unconfirmed waitlist row");
+  const { count, error } = await db
     .from("waitlist_signups")
     .select("id", { count: "exact", head: true })
-    .eq("city", row.city)
     .not("confirmed_at", "is", null)
-    .lte("created_at", row.created_at);
-  return Math.max(1, (count ?? 1) - row.referral_count * REFERRAL_BUMP);
+    .lte("confirmed_at", row.confirmed_at);
+  if (error || count == null) throw new Error("Waitlist position unavailable");
+  return queuePosition(count, row.referral_count * REFERRAL_BUMP);
 }
 
 async function syncSheet(stage: number, row: any) {
@@ -245,7 +247,8 @@ const METRO: Record<string, string> = { bay_area: "Bay Area", los_angeles: "Los 
 
 export async function handleStats() {
   const db = await admin();
-  const { data } = await db.from("waitlist_signups").select("city, created_at, trades, zip").not("confirmed_at", "is", null);
+  const { data, count, error } = await db.from("waitlist_signups").select("city, created_at, trades, zip", { count: "exact" }).not("confirmed_at", "is", null);
+  if (error || count == null) return json({ error: "stats_unavailable" }, 503);
   const rows = data ?? [];
   const cities = { bay_area: 0, los_angeles: 0, new_york: 0, other: 0 } as Record<string, number>;
   for (const r of rows) cities[r.city] = (cities[r.city] ?? 0) + 1;
@@ -266,7 +269,7 @@ export async function handleStats() {
     })
     .filter((r) => r.place);
   return json(
-    { total: rows.length, cities, recent7d: week.length, recent },
+    { ...waitlistTotals(count), cities, recent7d: week.length, recent },
     200,
     { "Cache-Control": "public, max-age=60, s-maxage=60" },
   );
