@@ -838,10 +838,6 @@
   .photo.initials::after {
     display: none;
   }
-  .letter {
-    padding: 18px;
-    background-image: repeating-linear-gradient(0deg, transparent 0 29px, var(--rule) 29px 30px);
-  }
   .backers h3 {
     display: inline-block;
     padding-bottom: 4px;
@@ -850,10 +846,6 @@
     font-size: 14px !important;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-  }
-  .letter p {
-    font-size: 17px;
-    line-height: 30px;
   }
 
   @media (min-width: 1024px) {

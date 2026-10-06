@@ -281,7 +281,6 @@ function Team() {
                 </li>
               ))}
             </ul>
-            {tm.company && <p className="small" style={{ marginTop: 14 }}>{tm.company}</p>}
           </div>
         </div>
       </div>
