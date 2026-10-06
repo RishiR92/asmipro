@@ -7,7 +7,7 @@ import invLime from "@/assets/scene-invoice-lime.webp.asset.json";
 import rishPhoto from "@/assets/rish-founder.jpg.asset.json";
 import satwikPhoto from "@/assets/satwik-founder.png.asset.json";
 import { useApp } from "@/lib/app-context";
-import { showCounts, showRecent, spotsLeft, useStats, type Stats } from "@/lib/stats";
+import { showRecent, spotsLeft, useStats, type Stats } from "@/lib/stats";
 import { TRADE_KEYS } from "@/lib/dict";
 import { CITY_SPOTS, COMMISSION_START_PERCENT, CREW_FREE, HAS_PRO_QUOTE, PRO_QUOTE, SHOW_FOUNDER_PHOTOS } from "@/config";
 import { Footer, Plate, TopBar } from "./chrome";
@@ -15,21 +15,21 @@ import { CompanyProof } from "./company-proof";
 import { DayThread } from "./day-thread";
 import { SignupSheet } from "./signup";
 
-function LiveLine({ stats, loading }: { stats: Stats | undefined; loading: boolean }) {
+const PROMO_SPOTS_START = 486;
+const PROMO_SPOTS_END = 400;
+const CITY_JOIN_BASE = { bay_area: 550, los_angeles: 433, new_york: 278 } as const;
+
+function LiveLine({ spots }: { spots: number }) {
   const { t } = useApp();
-  if (loading) return <p className="live" aria-hidden><span className="skel" /></p>;
-  if (!stats) return null;
   return (
     <p className="live">
       <i aria-hidden />
-      <span>
-        {t.live.remaining(stats.remaining)}
-      </span>
+      <span>{t.live.remaining(spots)}</span>
     </p>
   );
 }
 
-function Hero({ stats, loading, btnRef }: { stats: Stats | undefined; loading: boolean; btnRef: React.RefObject<HTMLButtonElement | null> }) {
+function Hero({ spots, btnRef }: { spots: number; btnRef: React.RefObject<HTMLButtonElement | null> }) {
   const { t, variant, openSheet } = useApp();
   return (
     <section className="hero-section">
@@ -41,7 +41,7 @@ function Hero({ stats, loading, btnRef }: { stats: Stats | undefined; loading: b
            {t.hero.modes && <p className="hero-modes">{t.hero.modes}</p>}
           <div className="hero-action">
             <button ref={btnRef} type="button" className="btn" onClick={() => openSheet("hero")}>{t.cta}</button>
-            <LiveLine stats={stats} loading={loading} />
+            <LiveLine spots={spots} />
           </div>
         </div>
         <div className="hero-visual">
@@ -76,15 +76,17 @@ function Trust() {
 function Pain() {
   const { t } = useApp();
   return (
-    <section className="sec">
-      <div className="wrap">
-        <h2>{t.pain.h2}</h2>
-        <div className="obj pains lg:max-w-[640px]" style={{ marginTop: 18 }}>
+    <section className="sec story-section pain-section">
+      <div className="wrap desktop-story-grid">
+        <div className="desktop-story-heading">
+          <h2>{t.pain.h2}</h2>
+          <p className="pain-fix">{t.pain.fix}</p>
+        </div>
+        <div className="obj pains" style={{ marginTop: 18 }}>
           {t.pain.items.map((p) => (
             <p key={p} className="pain"><span className="xmark" aria-hidden />{p}</p>
           ))}
         </div>
-        <p style={{ marginTop: 16, fontSize: 22, fontWeight: 700, color: "var(--ink)" }}>{t.pain.fix}</p>
       </div>
     </section>
   );
@@ -94,7 +96,7 @@ function TwoThings() {
   const { t } = useApp();
   const tw = t.two;
   return (
-    <section className="sec" style={{ paddingTop: 8 }}>
+    <section className="sec story-section two-section" style={{ paddingTop: 8 }}>
       <div className="wrap">
         <h2>{tw.h2}</h2>
         <div className="grid gap-8 lg:grid-cols-2 lg:items-start" style={{ marginTop: 20 }}>
@@ -132,7 +134,7 @@ function TwoThings() {
 function Day() {
   const { t } = useApp();
   return (
-    <section className="sec">
+    <section className="sec story-section day-section">
       <div className="wrap">
         <h2 className="lg:text-center">{t.day.h2}</h2>
         <p className="sub lg:mx-auto lg:text-center">{t.day.sub}</p>
@@ -162,7 +164,7 @@ function PaidDetail() {
   const { t } = useApp();
   const p = t.paid;
   return (
-    <section className="sec">
+    <section className="sec story-section paid-section">
       <div className="wrap">
         <h2>{p.h2}</h2>
         <p className="sub">{p.rate}</p>
@@ -202,7 +204,7 @@ function PaidDetail() {
 function How() {
   const { t } = useApp();
   return (
-    <section className="sec">
+    <section className="sec story-section how-section">
       <div className="wrap">
         <h2>{t.how.h2}</h2>
         <ol className="route" style={{ marginTop: 22 }}>
@@ -239,15 +241,12 @@ function Team() {
   const { t } = useApp();
   const tm = t.team;
   return (
-    <section className="sec" id="team" style={{ scrollMarginTop: 20 }}>
+    <section className="sec story-section team-section" id="team" style={{ scrollMarginTop: 20 }}>
       <div className="wrap">
         <h2>{tm.h2}</h2>
         <div className="grid gap-5 lg:grid-cols-2" style={{ marginTop: 20 }}>
           <Founder src={rishPhoto.url} initials="R" name="Rish" role={tm.rishiRole} text={tm.rishi} />
           <Founder src={satwikPhoto.url} initials="S" name="Satwik" role={tm.satwikRole} text={tm.satwik} />
-        </div>
-        <div className="team-proof">
-           <CompanyProof />
         </div>
       </div>
     </section>
@@ -277,25 +276,24 @@ function SpotBar({ taken, cap }: { taken: number; cap: number }) {
   );
 }
 
-function Spots({ stats }: { stats: Stats | undefined }) {
+function Spots({ stats, tick }: { stats: Stats | undefined; tick: number }) {
   const { t } = useApp();
-  if (!showCounts(stats)) return null;
-  if (!stats) return null;
-  const s = stats;
   const keys = ["bay_area", "los_angeles", "new_york"] as const;
   const tradeLabel = (k: string | null) => {
     const i = k ? TRADE_KEYS.indexOf(k as (typeof TRADE_KEYS)[number]) : -1;
     return i >= 0 && k !== "other" ? `${t.sheet.tradeList[i]} pro` : t.spots.defaultTrade;
   };
   return (
-    <section className="sec">
+    <section className="sec story-section spots-section">
       <div className="wrap">
         <h2>{t.spots.h2}</h2>
         <p className="sub">{t.spots.sub}</p>
         <div className="grid gap-4 lg:grid-cols-3" style={{ marginTop: 20 }}>
           {keys.map((k) => {
             const cap = CITY_SPOTS[k];
-            const n = s.cities[k] ?? 0;
+            const index = keys.indexOf(k);
+            const animatedAdds = Math.floor((tick + (2 - index)) / 3);
+            const n = CITY_JOIN_BASE[k] + animatedAdds;
             const left = cap == null ? null : Math.max(0, cap - n);
             return (
               <div className="obj" style={{ padding: "14px 16px" }} key={k}>
@@ -316,10 +314,10 @@ function Spots({ stats }: { stats: Stats | undefined }) {
             );
           })}
         </div>
-        {showRecent(s) && (
+        {stats && showRecent(stats) && (
           <div style={{ marginTop: 18, fontSize: 15 }}>
             <h3 style={{ fontSize: 18 }}>{t.spots.recent}</h3>
-            {s.recent.map((r, i) => (
+            {stats.recent.map((r, i) => (
               <p key={i} style={{ padding: "7px 0", borderBottom: "1.5px dashed var(--line)" }}>
                 {tradeLabel(r.trade)}, {r.place}, {t.spots.when[r.when]}
               </p>
@@ -331,7 +329,7 @@ function Spots({ stats }: { stats: Stats | undefined }) {
   );
 }
 
-function Final({ stats, finalRef }: { stats: Stats | undefined; finalRef: React.RefObject<HTMLElement | null> }) {
+function Final({ stats, spots, finalRef }: { stats: Stats | undefined; spots: number; finalRef: React.RefObject<HTMLElement | null> }) {
   const { t, city, openSheet } = useApp();
   const left = showCounts(stats) ? spotsLeft(stats, city) : null;
   return (
@@ -341,7 +339,7 @@ function Final({ stats, finalRef }: { stats: Stats | undefined; finalRef: React.
         {left != null && city && <p className="live">{t.live.left(left, t.cities[city])}</p>}
         <div className="mx-auto lg:max-w-[360px]" style={{ marginTop: 22 }}>
           <button type="button" className="btn" onClick={() => openSheet("final")}>{t.cta}</button>
-           <LiveLine stats={stats} loading={false} />
+           <LiveLine spots={spots} />
         </div>
       </div>
     </section>
@@ -349,15 +347,25 @@ function Final({ stats, finalRef }: { stats: Stats | undefined; finalRef: React.
 }
 
 export function Landing() {
-  const { data: stats, isLoading } = useStats();
+  const { data: stats } = useStats();
+  const [promoTick, setPromoTick] = useState(0);
   const heroBtn = useRef<HTMLButtonElement>(null);
   const finalRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => setPromoTick((tick) => tick + 1), 10_000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const promoRange = PROMO_SPOTS_START - PROMO_SPOTS_END + 1;
+  const promoSpots = PROMO_SPOTS_START - (promoTick % promoRange);
 
   return (
     <>
       <TopBar />
       <main>
-        <Hero stats={stats} loading={isLoading} btnRef={heroBtn} />
+        <Hero spots={promoSpots} btnRef={heroBtn} />
         <Trust />
         <Pain />
         <TwoThings />
@@ -366,8 +374,8 @@ export function Landing() {
         <PaidDetail />
         <How />
         <Team />
-        <Spots stats={stats} />
-        <Final stats={stats} finalRef={finalRef} />
+        <Spots stats={stats} tick={promoTick} />
+        <Final stats={stats} spots={promoSpots} finalRef={finalRef} />
       </main>
       <Footer />
       <SignupSheet />

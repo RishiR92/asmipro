@@ -19,8 +19,19 @@ export function CompanyProof() {
   const { t } = useApp();
   return (
     <div className="company-proof">
-      <CompanyTicker label={t.trust.teamLabel} names={t.trust.teamNames} />
-      <CompanyTicker label={t.trust.backedLabel} names={t.trust.backedNames} />
+      <div className="company-proof-sequence" aria-hidden="true">
+        <div className="company-proof-sequence-track">
+          <CompanyTicker label={t.trust.teamLabel} names={t.trust.teamNames} />
+          <CompanyTicker label={t.trust.backedLabel} names={t.trust.backedNames} />
+          <CompanyTicker label={t.trust.teamLabel} names={t.trust.teamNames} />
+        </div>
+      </div>
+      <span className="sr-only">
+        {t.trust.teamLabel} {t.trust.teamNames.join(", ")}. {t.trust.backedLabel} {t.trust.backedNames.join(", ")}.
+      </span>
+      <div className="company-proof-static" aria-hidden="true">
+        <b>{t.trust.teamLabel}</b> {t.trust.teamNames.join(", ")}. <b>{t.trust.backedLabel}</b> {t.trust.backedNames.join(", ")}.
+      </div>
     </div>
   );
 }

@@ -21,7 +21,7 @@ const en = {
   checks: [],
   example: "EXAMPLE",
   live: {
-    remaining: (n: number) => n > 0 ? `Only ${n} waitlist spots left.` : "This group is full. Join for the next rollout.",
+    remaining: (n: number) => n > 0 ? `Only ${n} spots left.` : "This group is full. Join for the next rollout.",
     pros: (n: number) => `${n.toLocaleString("en-US")} pros on the list.`,
     left: (n: number, c: string) => `${n} spots left in ${c}.`,
     stickyLeft: (n: number, c: string) => `${n} founding spots left in ${c}`,
@@ -213,7 +213,7 @@ const es: Dict = {
   checks: [],
   example: "EJEMPLO",
   live: {
-    remaining: (n: number) => n > 0 ? `Solo quedan ${n} lugares en la lista.` : "Este grupo está lleno. Únete para la próxima apertura.",
+    remaining: (n: number) => n > 0 ? `Solo quedan ${n} lugares.` : "Este grupo está lleno. Únete para la próxima apertura.",
     pros: (n: number) => `${n.toLocaleString("en-US")} pros en la lista.`,
     left: (n: number, c: string) => `Quedan ${n} lugares en ${c}.`,
     stickyLeft: (n: number, c: string) => `Quedan ${n} lugares fundadores en ${c}`,
