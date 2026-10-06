@@ -57,10 +57,6 @@ export function Footer() {
           <> · {t.footer.text} <a href={`sms:${SUPPORT_TEXT_NUMBER}`}>{SUPPORT_TEXT_NUMBER}</a></>
         )}
       </p>
-      <p className="mt-3 flex gap-5">
-        <Link to="/privacy" className="inline-flex min-h-12 items-center">{t.footer.privacy}</Link>
-        <Link to="/terms" className="inline-flex min-h-12 items-center">{t.footer.terms}</Link>
-      </p>
       <p className="mt-2">© 2026 Humint Labs, Inc.</p>
     </footer>
   );

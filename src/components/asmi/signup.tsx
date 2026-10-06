@@ -1,5 +1,4 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { Link } from "@tanstack/react-router";
 import { AsYouType, isValidPhoneNumber } from "libphonenumber-js";
 import { useState } from "react";
 import callBase from "@/assets/scene-call-base.webp.asset.json";
@@ -195,13 +194,7 @@ export function SignupFlow({ onClose }: { onClose?: () => void }) {
 
           <label className="consent" htmlFor="f-consent">
             <input id="f-consent" type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} aria-describedby="e-consent" />
-            <span>
-              <b>{s.consentBold}</b>{" "}
-              {s.consentPre}
-              <Link to="/terms" target="_blank" rel="noopener">{s.terms}</Link>
-              {s.and}
-              <Link to="/privacy" target="_blank" rel="noopener">{s.privacy}</Link>.
-            </span>
+            <span><b>{s.consentBold}</b></span>
           </label>
           <p className="err" id="e-consent" aria-live="polite">{errs.consent}</p>
 

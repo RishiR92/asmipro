@@ -6,3 +6,7 @@
 - [x] Add other-city field and true two-step waitlist confirmation
 - [x] Simplify referral sharing and form consent copy
 - [x] Verify database delivery, responsive presentation, and key signup paths
+- [x] Simplify the mobile opening and supporting proof
+- [x] Refine founder and backer presentation
+- [x] Remove FAQ and draft legal pages
+- [x] Verify mobile, desktop, bilingual copy, and waitlist flow

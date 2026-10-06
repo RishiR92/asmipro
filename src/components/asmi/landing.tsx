@@ -6,16 +6,12 @@ import invBase from "@/assets/scene-invoice-base.webp.asset.json";
 import invLime from "@/assets/scene-invoice-lime.webp.asset.json";
 import metaLogo from "@/assets/meta-ink.svg.asset.json";
 import dmLogo from "@/assets/deepmind-ink.svg.asset.json";
-import snapLogo from "@/assets/snapchat-ink.svg.asset.json";
 import rishPhoto from "@/assets/rish-founder.jpg.asset.json";
 import satwikPhoto from "@/assets/satwik-founder.png.asset.json";
-import { track, useApp } from "@/lib/app-context";
+import { useApp } from "@/lib/app-context";
 import { showCounts, showRecent, spotsLeft, useStats, type Stats } from "@/lib/stats";
 import { TRADE_KEYS } from "@/lib/dict";
-import {
-  CITY_SPOTS, COMMISSION_START_PERCENT, CREW_FREE, HAS_PRO_QUOTE, NO_APP_NEEDED, PAYOUT_TIMING, PRO_QUOTE, SHOW_FOUNDER_PHOTOS,
-  SPANISH_CALLS, SUPPORT_EMAIL, SUPPORT_TEXT_NUMBER,
-} from "@/config";
+import { CITY_SPOTS, COMMISSION_START_PERCENT, CREW_FREE, HAS_PRO_QUOTE, PRO_QUOTE, SHOW_FOUNDER_PHOTOS } from "@/config";
 import { Checks, Footer, Plate, TopBar } from "./chrome";
 import { DayThread } from "./day-thread";
 import { SignupSheet } from "./signup";
@@ -39,20 +35,20 @@ function LiveLine({ stats, loading }: { stats: Stats | undefined; loading: boole
 function Hero({ stats, loading, btnRef }: { stats: Stats | undefined; loading: boolean; btnRef: React.RefObject<HTMLButtonElement | null> }) {
   const { t, variant, openSheet } = useApp();
   return (
-    <section style={{ paddingTop: 4, paddingBottom: 36 }}>
-      <div className="wrap lg:grid lg:grid-cols-2 lg:items-center lg:gap-12">
-        <div>
-          <p className="eyebrow">{t.hero.eyebrow}</p>
+    <section className="hero-section">
+      <div className="wrap hero-layout">
+        <div className="hero-copy">
+           {t.hero.eyebrow && <p className="eyebrow">{t.hero.eyebrow}</p>}
           <h1>{t.hero.h1[variant]}</h1>
           <p className="sub hero-sub">{t.hero.sub}</p>
-          <p className="hero-modes">{t.hero.modes}</p>
-          <div style={{ marginTop: 22 }} className="lg:max-w-[360px]">
+           {t.hero.modes && <p className="hero-modes">{t.hero.modes}</p>}
+          <div className="hero-action">
             <button ref={btnRef} type="button" className="btn" onClick={() => openSheet("hero")}>{t.cta}</button>
             <Checks items={t.checks} />
             <LiveLine stats={stats} loading={loading} />
           </div>
         </div>
-        <div className="relative" style={{ marginTop: 22, marginBottom: 14 }}>
+        <div className="hero-visual">
           <Plate base={heroBase.url} lime={heroLime.url} alt={t.hero.artAlt} w={1000} h={747} eager settle />
           <div className="chip">
             <span className="tag">{t.example}</span>
@@ -76,19 +72,15 @@ function Trust() {
       aria-label={tr.aria}
       onClick={() => document.getElementById("team")?.scrollIntoView({ behavior: "smooth" })}
     >
-      <div className="wrap flex flex-col gap-2 lg:flex-row lg:justify-between">
+      <div className="wrap trust-grid">
         <span className="trust-item">
           <img src={metaLogo.url} alt="" width={28} height={22} style={{ width: 28, height: 22 }} />
           <img src={dmLogo.url} alt="" width={22} height={22} style={{ width: 22, height: 22 }} />
           <span>{tr.team[0]}<b>{tr.team[1]}</b>{tr.team[2]}<b>{tr.team[3]}</b></span>
         </span>
         <span className="trust-item">
-          <img src={snapLogo.url} alt="" width={22} height={22} style={{ width: 22, height: 22 }} />
+          <span className="trust-mark" aria-hidden>S</span>
           <span>{tr.backed[0]}<b>{tr.backed[1]}</b></span>
-        </span>
-        <span className="trust-item">
-          <b className="tnum" style={{ fontSize: 16 }}>2,500+</b>
-          <span>{tr.biz}</span>
         </span>
       </div>
     </button>
@@ -279,28 +271,16 @@ function Team() {
           <Founder src={rishPhoto.url} initials="R" name="Rish" role={tm.rishiRole} text={tm.rishi} />
           <Founder src={satwikPhoto.url} initials="S" name="Satwik" role={tm.satwikRole} text={tm.satwik} />
         </div>
-        <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
-          <div className="obj letter" style={{ marginTop: 22 }}>
-            <p>{tm.letter}</p>
-            <p style={{ marginTop: 8, fontWeight: 700, color: "var(--ink)" }}>{tm.sig}</p>
-            <p>
-              {SUPPORT_TEXT_NUMBER ? (
-                <>{tm.qText(SUPPORT_TEXT_NUMBER).replace(/\.$/, "")}.</>
-              ) : (
-                <a href={`mailto:${SUPPORT_EMAIL}`} style={{ color: "var(--ink)" }}>{tm.qEmail(SUPPORT_EMAIL)}</a>
-              )}
-            </p>
-          </div>
-          <div className="backers" style={{ marginTop: 22 }}>
+        <div className="team-proof">
+          <div className="backers">
             <h3 style={{ fontSize: 19 }}>{tm.backedBy}</h3>
-            <ul className="grid gap-2" style={{ marginTop: 10 }}>
+             <ul className="backer-brands" style={{ marginTop: 10 }}>
               {tm.backers.map(([n, d]) => (
-                <li key={n} style={{ fontSize: 16, borderBottom: "1.5px solid var(--line)", paddingBottom: 9 }}>
-                  <b style={{ color: "var(--ink)" }}>{n}</b>, {d}
+                 <li key={n}>
+                   <b>{n}</b>{d && <>, {d}</>}
                 </li>
               ))}
             </ul>
-            <p className="small" style={{ marginTop: 14 }}>{tm.company}</p>
           </div>
         </div>
       </div>
@@ -384,57 +364,6 @@ function Spots({ stats }: { stats: Stats | undefined }) {
   );
 }
 
-function Faq() {
-  const { t } = useApp();
-  const f = t.faq.items;
-  const items: [string, string][] = [
-    f.catch, f.card, f.number, f.approve,
-    ...(CREW_FREE ? [f.free] : []),
-    ...(NO_APP_NEEDED ? [f.app] : []),
-    [f.where[0], t.paid.whereA] as [string, string],
-    f.paid, f.callers, f.mine, f.real, f.start,
-    ...(SPANISH_CALLS ? [f.spanish] : []),
-    ...(PAYOUT_TIMING ? [[f.payout[0], PAYOUT_TIMING] as [string, string]] : []),
-  ];
-  const [open, setOpen] = useState<Set<number>>(new Set([0, 1]));
-  return (
-    <section className="sec">
-      <div className="wrap">
-        <h2>{t.faq.h2}</h2>
-        <div className="obj lg:max-w-[760px]" style={{ marginTop: 18, padding: "0 18px" }}>
-          {items.map(([q, a], i) => {
-            const isOpen = open.has(i);
-            return (
-              <div key={q} style={{ borderBottom: i < items.length - 1 ? "1.5px solid var(--line)" : 0 }}>
-                <h3 style={{ fontSize: 18 }}>
-                  <button
-                    type="button"
-                    className="faq-q"
-                    aria-expanded={isOpen}
-                    aria-controls={`faq-${i}`}
-                    onClick={() => {
-                      const n = new Set(open);
-                      if (isOpen) n.delete(i);
-                      else { n.add(i); track("faq_open", { question: i + 1 }); }
-                      setOpen(n);
-                    }}
-                  >
-                    <span>{q}</span>
-                    <span className={`pm ${isOpen ? "open" : ""}`} aria-hidden />
-                  </button>
-                </h3>
-                <div id={`faq-${i}`} hidden={!isOpen}>
-                  <p style={{ fontSize: 17, paddingBottom: 16 }}>{a}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function Final({ stats, finalRef }: { stats: Stats | undefined; finalRef: React.RefObject<HTMLElement | null> }) {
   const { t, city, openSheet } = useApp();
   const left = showCounts(stats) ? spotsLeft(stats, city) : null;
@@ -471,7 +400,6 @@ export function Landing() {
         <How />
         <Team />
         <Spots stats={stats} />
-        <Faq />
         <Final stats={stats} finalRef={finalRef} />
       </main>
       <Footer />
