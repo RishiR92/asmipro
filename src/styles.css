@@ -418,7 +418,7 @@
     overflow: hidden;
   }
   .company-proof-sequence-track {
-    animation: proof-sequence 18s ease-in-out infinite;
+    animation: proof-sequence 9s ease-in-out infinite;
   }
   .company-proof-row {
     display: flex;
@@ -440,7 +440,7 @@
   }
   .company-ticker-track {
     display: block;
-    animation: company-roll 9s steps(1, end) infinite;
+    animation: company-roll 4.5s ease-in-out infinite;
   }
   .company-ticker-track b {
     display: block;
@@ -448,11 +448,10 @@
     line-height: 32px;
   }
   .company-proof-row:nth-child(2) .company-ticker-track {
-    animation-delay: -1.5s;
+    animation-delay: 0s;
   }
   .company-static,
   .company-proof-static { display: none; color: var(--ink); }
-  .company-proof:hover .company-ticker-track { animation-play-state: paused; }
   @media (min-width: 1024px) {
     .company-proof-sequence { height: 64px; }
     .company-proof-row { height: 64px; font-size: 30px; line-height: 44px; gap: 14px; }
