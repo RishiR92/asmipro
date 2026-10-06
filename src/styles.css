@@ -431,6 +431,7 @@
     white-space: nowrap;
   }
   .company-ticker {
+    --ticker-step: 32px;
     display: inline-block;
     height: 32px;
     width: 104px;
@@ -455,7 +456,7 @@
   @media (min-width: 1024px) {
     .company-proof-sequence { height: 64px; }
     .company-proof-row { height: 64px; font-size: 30px; line-height: 44px; gap: 14px; }
-    .company-ticker { height: 44px; width: 170px; }
+    .company-ticker { --ticker-step: 44px; height: 44px; width: 170px; }
     .company-ticker-track b { height: 44px; line-height: 44px; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -1240,9 +1241,9 @@
 }
 @keyframes company-roll {
   0%, 32% { transform: translateY(0); }
-  33%, 65% { transform: translateY(-100%); }
-  66%, 99% { transform: translateY(-200%); }
-  100% { transform: translateY(-300%); }
+  33%, 65% { transform: translateY(calc(-1 * var(--ticker-step))); }
+  66%, 99% { transform: translateY(calc(-2 * var(--ticker-step))); }
+  100% { transform: translateY(calc(-3 * var(--ticker-step))); }
 }
 @keyframes proof-sequence {
   0%, 44% { transform: translateY(0); }
