@@ -12,4 +12,5 @@
 - All page copy lives in src/lib/dict.ts (en/es) so both languages stay in sync.
 - Waitlist rows are drafts after step one; only rows with confirmed_at set after step two count publicly or earn referral credit.
 - Global queue positions and remaining launch allocation use shared count helpers plus confirmed rows, so verified pre-existing signups are counted once without fabricated database records.
-- Both company-proof locations reuse one accessible ticker with a static reduced-motion fallback to keep brand claims and animation aligned.
+- Company proof uses one coordinated accessible ticker with a static reduced-motion fallback so labels and company names stay aligned.
+- The day conversation renders inside a fixed-aspect phone with an independently scrolling message list so playback never stretches the page.

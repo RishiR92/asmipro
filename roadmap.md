@@ -19,3 +19,5 @@
 - [x] Enlarge and coordinate the team/backer ticker, removing its founder-section repeat
 - [x] Restructure desktop sections without changing the mobile flow
 - [x] Verify both languages, reduced motion, mobile, and desktop
+- [ ] Give the conversation a realistic fixed phone size with automatic message scrolling
+- [ ] Speed up the coordinated team/backer ticker and verify both languages
