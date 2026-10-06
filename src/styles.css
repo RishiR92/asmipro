@@ -418,7 +418,7 @@
     overflow: hidden;
   }
   .company-proof-sequence-track {
-    animation: proof-sequence 18s ease-in-out infinite;
+    animation: proof-sequence 9s ease-in-out infinite;
   }
   .company-proof-row {
     display: flex;
@@ -440,7 +440,7 @@
   }
   .company-ticker-track {
     display: block;
-    animation: company-roll 9s steps(1, end) infinite;
+    animation: company-roll 4.5s ease-in-out infinite;
   }
   .company-ticker-track b {
     display: block;
@@ -448,11 +448,10 @@
     line-height: 32px;
   }
   .company-proof-row:nth-child(2) .company-ticker-track {
-    animation-delay: -1.5s;
+    animation-delay: 0s;
   }
   .company-static,
   .company-proof-static { display: none; color: var(--ink); }
-  .company-proof:hover .company-ticker-track { animation-play-state: paused; }
   @media (min-width: 1024px) {
     .company-proof-sequence { height: 64px; }
     .company-proof-row { height: 64px; font-size: 30px; line-height: 44px; gap: 14px; }
@@ -585,7 +584,12 @@
   /* Phone */
   .phone {
     margin: 22px auto 0;
+    width: 100%;
     max-width: 360px;
+    aspect-ratio: 9 / 18;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     background: var(--obj);
     border: 2.5px solid var(--ink);
     border-radius: 36px;
@@ -594,6 +598,7 @@
   }
   .ph-top {
     display: flex;
+    flex: none;
     align-items: center;
     gap: 10px;
     padding: 6px 6px 12px;
@@ -617,7 +622,27 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding-top: 12px;
+    padding: 12px 0 18px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    overscroll-behavior: contain;
+  }
+  .thread::-webkit-scrollbar {
+    display: none;
+  }
+  .thread > li {
+    flex-shrink: 0;
+  }
+  .phone::after {
+    content: "";
+    width: 100px;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--ink);
+    margin: 8px auto 0;
+    flex: none;
   }
   .ts {
     font: 500 14px var(--font-mono);
@@ -1248,9 +1273,9 @@
   }
 }
 @keyframes company-roll {
-  0%, 32% { transform: translateY(0); }
-  33%, 65% { transform: translateY(calc(-1 * var(--ticker-step))); }
-  66%, 99% { transform: translateY(calc(-2 * var(--ticker-step))); }
+  0%, 26% { transform: translateY(0); }
+  33.333%, 59% { transform: translateY(calc(-1 * var(--ticker-step))); }
+  66.666%, 92% { transform: translateY(calc(-2 * var(--ticker-step))); }
   100% { transform: translateY(calc(-3 * var(--ticker-step))); }
 }
 @keyframes proof-sequence {
