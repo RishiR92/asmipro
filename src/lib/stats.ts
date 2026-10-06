@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { CITY_SPOTS, MIN_COUNT_TO_SHOW, RECENT_MIN, type CityKey } from "@/config";
 
-// Real counts only. Nothing here is seeded, padded or faked.
+// Counts include the owner's verified existing waitlist plus new confirmed rows.
 export type Stats = {
   total: number;
+  remaining: number;
   cities: Record<CityKey, number>;
   recent7d: number;
   recent: { trade: string | null; place: string; when: "today" | "yesterday" | "this week" }[];

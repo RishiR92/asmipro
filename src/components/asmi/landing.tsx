@@ -4,29 +4,26 @@ import heroLime from "@/assets/scene-hero3-lime.webp.asset.json";
 import paidArt from "@/assets/scene-paid.webp.asset.json";
 import invBase from "@/assets/scene-invoice-base.webp.asset.json";
 import invLime from "@/assets/scene-invoice-lime.webp.asset.json";
-import metaLogo from "@/assets/meta-ink.svg.asset.json";
-import dmLogo from "@/assets/deepmind-ink.svg.asset.json";
 import rishPhoto from "@/assets/rish-founder.jpg.asset.json";
 import satwikPhoto from "@/assets/satwik-founder.png.asset.json";
 import { useApp } from "@/lib/app-context";
 import { showCounts, showRecent, spotsLeft, useStats, type Stats } from "@/lib/stats";
 import { TRADE_KEYS } from "@/lib/dict";
 import { CITY_SPOTS, COMMISSION_START_PERCENT, CREW_FREE, HAS_PRO_QUOTE, PRO_QUOTE, SHOW_FOUNDER_PHOTOS } from "@/config";
-import { Checks, Footer, Plate, TopBar } from "./chrome";
+import { Footer, Plate, TopBar } from "./chrome";
+import { CompanyProof } from "./company-proof";
 import { DayThread } from "./day-thread";
 import { SignupSheet } from "./signup";
 
 function LiveLine({ stats, loading }: { stats: Stats | undefined; loading: boolean }) {
-  const { t, city } = useApp();
+  const { t } = useApp();
   if (loading) return <p className="live" aria-hidden><span className="skel" /></p>;
-  if (!showCounts(stats)) return null;
-  const left = spotsLeft(stats, city);
+  if (!stats) return null;
   return (
     <p className="live">
       <i aria-hidden />
       <span>
-        {t.live.pros(stats!.total)}
-        {left != null && city && ` ${t.live.left(left, t.cities[city])}`}
+        {t.live.remaining(stats.remaining)}
       </span>
     </p>
   );
@@ -44,7 +41,6 @@ function Hero({ stats, loading, btnRef }: { stats: Stats | undefined; loading: b
            {t.hero.modes && <p className="hero-modes">{t.hero.modes}</p>}
           <div className="hero-action">
             <button ref={btnRef} type="button" className="btn" onClick={() => openSheet("hero")}>{t.cta}</button>
-            <Checks items={t.checks} />
             <LiveLine stats={stats} loading={loading} />
           </div>
         </div>
@@ -72,17 +68,7 @@ function Trust() {
       aria-label={tr.aria}
       onClick={() => document.getElementById("team")?.scrollIntoView({ behavior: "smooth" })}
     >
-      <div className="wrap trust-grid">
-        <span className="trust-item">
-          <img src={metaLogo.url} alt="" width={28} height={22} style={{ width: 28, height: 22 }} />
-          <img src={dmLogo.url} alt="" width={22} height={22} style={{ width: 22, height: 22 }} />
-          <span>{tr.team[0]}<b>{tr.team[1]}</b>{tr.team[2]}<b>{tr.team[3]}</b></span>
-        </span>
-        <span className="trust-item">
-          <span className="trust-mark" aria-hidden>S</span>
-          <span>{tr.backed[0]}<b>{tr.backed[1]}</b></span>
-        </span>
-      </div>
+       <div className="wrap"><CompanyProof /></div>
     </button>
   );
 }
@@ -145,23 +131,12 @@ function TwoThings() {
 
 function Day() {
   const { t } = useApp();
-  const r = t.day.receipt;
   return (
     <section className="sec">
       <div className="wrap">
         <h2 className="lg:text-center">{t.day.h2}</h2>
         <p className="sub lg:mx-auto lg:text-center">{t.day.sub}</p>
         <DayThread />
-        <div className="receipt">
-          <div className="flex items-center justify-between" style={{ marginBottom: 6 }}>
-            <b style={{ fontSize: 17, color: "var(--ink)" }}>{r.head}</b>
-            <span className="tag" style={{ marginBottom: 0 }}>{t.example}</span>
-          </div>
-          <p className="row"><span>{r.earned}</span><b className="tnum">$610</b></p>
-          <p className="row"><span>{r.owed}</span><b className="tnum">$180</b></p>
-          <p className="row" style={{ borderBottom: 0 }}><span>{r.paper}</span><b>{r.none}</b></p>
-        </div>
-        <p className="small text-center mx-auto" style={{ marginTop: 28, maxWidth: "46ch" }}>{t.day.fine}</p>
       </div>
     </section>
   );
@@ -272,16 +247,7 @@ function Team() {
           <Founder src={satwikPhoto.url} initials="S" name="Satwik" role={tm.satwikRole} text={tm.satwik} />
         </div>
         <div className="team-proof">
-          <div className="backers">
-            <h3 style={{ fontSize: 19 }}>{tm.backedBy}</h3>
-             <ul className="backer-brands" style={{ marginTop: 10 }}>
-              {tm.backers.map(([n, d]) => (
-                 <li key={n}>
-                   <b>{n}</b>{d && <>, {d}</>}
-                </li>
-              ))}
-            </ul>
-          </div>
+           <CompanyProof />
         </div>
       </div>
     </section>
@@ -314,7 +280,8 @@ function SpotBar({ taken, cap }: { taken: number; cap: number }) {
 function Spots({ stats }: { stats: Stats | undefined }) {
   const { t } = useApp();
   if (!showCounts(stats)) return null;
-  const s = stats!;
+  if (!stats) return null;
+  const s = stats;
   const keys = ["bay_area", "los_angeles", "new_york"] as const;
   const tradeLabel = (k: string | null) => {
     const i = k ? TRADE_KEYS.indexOf(k as (typeof TRADE_KEYS)[number]) : -1;
@@ -374,7 +341,7 @@ function Final({ stats, finalRef }: { stats: Stats | undefined; finalRef: React.
         {left != null && city && <p className="live">{t.live.left(left, t.cities[city])}</p>}
         <div className="mx-auto lg:max-w-[360px]" style={{ marginTop: 22 }}>
           <button type="button" className="btn" onClick={() => openSheet("final")}>{t.cta}</button>
-          <Checks items={t.checks} />
+           <LiveLine stats={stats} loading={false} />
         </div>
       </div>
     </section>

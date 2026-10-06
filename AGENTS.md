@@ -11,3 +11,5 @@
 - Waitlist writes and stats go through server routes under src/routes/api/public (logic in src/lib/waitlist.server.ts) using the service role; tables have RLS with no public policies, so the browser never touches the database directly.
 - All page copy lives in src/lib/dict.ts (en/es) so both languages stay in sync.
 - Waitlist rows are drafts after step one; only rows with confirmed_at set after step two count publicly or earn referral credit.
+- Global queue positions and remaining launch allocation use shared count helpers plus confirmed rows, so verified pre-existing signups are counted once without fabricated database records.
+- Both company-proof locations reuse one accessible ticker with a static reduced-motion fallback to keep brand claims and animation aligned.
