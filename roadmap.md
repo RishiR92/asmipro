@@ -15,7 +15,7 @@
 - [x] Rewrite phone examples in natural pro language in both languages
 - [x] Track 200 remaining spots and continue confirmed queue numbers from 305
 - [x] Verify updated page and counting behavior
-- [ ] Change scarcity copy to 486 and animate promotional counts every 10 seconds
-- [ ] Enlarge and coordinate the team/backer ticker, removing its founder-section repeat
-- [ ] Restructure desktop sections without changing the mobile flow
-- [ ] Verify both languages, reduced motion, mobile, and desktop
+- [x] Change scarcity copy to 486 and animate promotional counts every 10 seconds
+- [x] Enlarge and coordinate the team/backer ticker, removing its founder-section repeat
+- [x] Restructure desktop sections without changing the mobile flow
+- [x] Verify both languages, reduced motion, mobile, and desktop
