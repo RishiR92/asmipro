@@ -7,7 +7,7 @@ import invLime from "@/assets/scene-invoice-lime.webp.asset.json";
 import rishPhoto from "@/assets/rish-founder.jpg.asset.json";
 import satwikPhoto from "@/assets/satwik-founder.png.asset.json";
 import { useApp } from "@/lib/app-context";
-import { showRecent, spotsLeft, useStats, type Stats } from "@/lib/stats";
+import { showCounts, showRecent, spotsLeft, useStats, type Stats } from "@/lib/stats";
 import { TRADE_KEYS } from "@/lib/dict";
 import { CITY_SPOTS, COMMISSION_START_PERCENT, CREW_FREE, HAS_PRO_QUOTE, PRO_QUOTE, SHOW_FOUNDER_PHOTOS } from "@/config";
 import { Footer, Plate, TopBar } from "./chrome";
