@@ -27,4 +27,4 @@
 - [x] Present the story and plan for new Hoys logo variations
 - [x] Create four approved Hoys logo concepts as PNGs
 - [x] Inspect light/dark and small-size versions and deliver comparison sheet
-- [ ] Deliver black and white transparent PNGs of the selected Precision logo
+- [x] Deliver black and white transparent PNGs of the selected Precision logo
