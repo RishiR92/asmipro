@@ -23,3 +23,5 @@
 - [x] Speed up the coordinated team/backer ticker and verify both languages
 - [x] Remove launch-city wording from the form in both languages
 - [x] Start the phone demo only after scrolling it into view and verify playback
+- [ ] Research elegant Hoys lettering, palette, and subtle trade references
+- [ ] Present the story and plan for new Hoys logo variations
