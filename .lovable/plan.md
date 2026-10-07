@@ -14,9 +14,15 @@ The ambition is a category-defining AI company—not a local handyman business. 
 ## Reference principles
 Instinct.com currently uses a white homepage, dark onyx text, and Aime typography, with restrained visual detail. Its broader styles include Melange, muted sand, red, and teal. Borrow the confidence and human tone—not its lettering, mascot, or layout.
 
+OpenAI's official brand guidance emphasizes custom lettering that balances geometric precision with an approachable character. Sierra supplies monochrome and reversed logo variants. The useful shared principle is disciplined typography and adaptable reproduction—not a color that magically signals a valuation. No palette guarantees trust or company scale.
+
+Small-size reproduction is a deciding constraint: SanDisk's identity case study describes dropping a symbol partly because it did not print well on very small products. For Hoys, a tool reference should be one simple structural gesture rather than a detailed illustration. Color and motif recommendations below are design judgments, not measured conversion claims.
+
+Sources: [Instinct](https://instinct.com/), [its current stylesheet](https://instinct.com/assets/main-KOn_Igr-.css), [OpenAI brand guidance](https://openai.com/brand/), [Sierra brand guidance](https://sierra.ai/using-our-brand), [SanDisk identity case study](https://www.underconsideration.com/brandnew_v1/archives/sandisk_through_a_qa_with_bret.php).
+
 ## Four directions to develop
 1. **Quiet authority — recommended baseline.** A finely balanced lowercase design with moderate stroke weight, open counters, and subtle flared terminals. Confident and human rather than heavy and bubbly. Distinctive through the relationship between the h, o, y, and s alone.
-2. **Precision fit.** Architectural sans-serif lettering with a restrained fitting or joint suggested where the h shoulder meets its stem. A crafted construction detail, not a recognizable plumbing-only pictogram.
+2. **Precision fit.** Architectural sans-serif lettering with a single hexagonal chamfer or fitting-like joint at the h shoulder or y terminal. A crafted construction detail, not a recognizable plumbing-only pictogram. This is the strongest tool-integrated candidate because it can remain a clean letter at small sizes.
 3. **The hanging detail.** Refined lettering with a tiny simplified wrench hooked directly onto the y terminal. The name remains dominant; the attachment is a discovery at larger sizes. Also show a clean small-size version without the attachment.
 4. **Crafted intelligence.** A contemporary low-contrast serif treatment with robust proportions and one quietly tooled terminal. Editorial elegance without fragile hairlines, vintage tradesman styling, or luxury-fashion imitation.
 
