@@ -25,5 +25,5 @@
 - [x] Start the phone demo only after scrolling it into view and verify playback
 - [x] Research elegant Hoys lettering, palette, and subtle trade references
 - [x] Present the story and plan for new Hoys logo variations
-- [ ] Create four approved Hoys logo concepts as PNGs
-- [ ] Inspect light/dark and small-size versions and deliver comparison sheet
+- [x] Create four approved Hoys logo concepts as PNGs
+- [x] Inspect light/dark and small-size versions and deliver comparison sheet
